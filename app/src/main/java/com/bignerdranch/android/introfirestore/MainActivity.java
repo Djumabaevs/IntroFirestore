@@ -8,6 +8,9 @@ import android.widget.EditText;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
     private EditText enterName;
     private EditText enterThought;
@@ -26,6 +29,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         saveButton.setOnClickListener(view -> {
+            String title = enterName.getText().toString().trim();
+            String thought = enterThought.getText().toString().trim();
+
+            Map<String, Object> data = new HashMap<>();
+            data.put(KEY_TITLE, title);
+            data.put(KEY_THOUGHT, thought);
 
         });
 
