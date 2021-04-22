@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "330341055911",
+    "project_id": "introfirestore-9c190",
+    "storage_bucket": "introfirestore-9c190.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330341055911:android:0f9728cef542d47a608a82",
+        "android_client_info": {
+          "package_name": "com.bignerdranch.android.introfirestore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "330341055911-8ujhp950b0n6fk0p7gfab0dsibji7p8a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAN5Rows7N-fCacwqBxWbZuXIiHhUPkKzw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "330341055911-8ujhp950b0n6fk0p7gfab0dsibji7p8a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
