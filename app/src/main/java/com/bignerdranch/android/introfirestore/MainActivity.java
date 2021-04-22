@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity" ;
-    private EditText enterName;
+    private EditText enterTitle;
     private EditText enterThought;
     private Button saveButton;
 
@@ -34,8 +34,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        saveButton = findViewById(R.id.save_button);
+        enterTitle = findViewById(R.id.edit_text_title);
+        enterThought = findViewById(R.id.edit_text_thoughts);
+
         saveButton.setOnClickListener(view -> {
-            String title = enterName.getText().toString().trim();
+            String title = enterTitle.getText().toString().trim();
             String thought = enterThought.getText().toString().trim();
 
             Map<String, Object> data = new HashMap<>();
@@ -43,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             data.put(KEY_THOUGHT, thought);
 
             db.collection("Journal")
-                    .document("First thoughts")
+                    .document("First thought")
                     .set(data)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
