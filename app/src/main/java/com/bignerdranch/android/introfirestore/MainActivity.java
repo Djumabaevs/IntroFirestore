@@ -64,11 +64,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             journalRef.get()
                     .addOnSuccessListener(documentSnapshot -> {
                         if(documentSnapshot.exists()) {
-                            String title = documentSnapshot.getString(KEY_TITLE);
-                            String thought = documentSnapshot.getString(KEY_THOUGHT);
 
-                            recTitle.setText(title);
-                            recThought.setText(thought);
+                            Journal journal = documentSnapshot.toObject(Journal.class);
+
+                          /*
+                            String title = documentSnapshot.getString(KEY_TITLE);
+                            String thought = documentSnapshot.getString(KEY_THOUGHT);*/
+
+                            assert journal != null;
+                            recTitle.setText(journal.getTitle());
+                            recThought.setText(journal.getThought());
                         } else {
                             Toast.makeText(MainActivity.this, "No data", Toast.LENGTH_LONG).show();
                         }
@@ -80,12 +85,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String title = enterTitle.getText().toString().trim();
             String thought = enterThought.getText().toString().trim();
 
-            Map<String, Object> data = new HashMap<>();
+            Journal journal = new Journal();
+            journal.setTitle(title);
+            journal.setThought(thought);
+
+           /* Map<String, Object> data = new HashMap<>();
             data.put(KEY_TITLE, title);
-            data.put(KEY_THOUGHT, thought);
+            data.put(KEY_THOUGHT, thought);*/
 
-
-                    journalRef.set(data)
+                    journalRef.set(journal)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -114,11 +122,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                              Toast.LENGTH_LONG).show();
                  }
                  if(documentSnapshot != null & documentSnapshot.exists()) {
-                     String title = documentSnapshot.getString(KEY_TITLE);
+
+                     Journal journal = documentSnapshot.toObject(Journal.class);
+
+                     assert journal != null;
+                     recTitle.setText(journal.getTitle());
+                     recThought.setText(journal.getThought());
+
+                    /* String title = documentSnapshot.getString(KEY_TITLE);
                      String thought = documentSnapshot.getString(KEY_THOUGHT);
 
                      recTitle.setText(title);
-                     recThought.setText(thought);
+                     recThought.setText(thought);*/
                  } else {
                      recTitle.setText("");
                      recThought.setText("");
