@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,11 +25,11 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity" ;
     private EditText enterTitle;
     private EditText enterThought;
-    private Button saveButton, showButton;
+    private Button saveButton, showButton, updateButton;
     private TextView recTitle, recThought;
 
     //Keys
@@ -52,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
         recTitle = findViewById(R.id.rec_title);
         recThought = findViewById(R.id.rec_thought);
         showButton = findViewById(R.id.show_button);
+        updateButton = findViewById(R.id.update_button);
+
+        updateButton.setOnClickListener(this);
 
         showButton.setOnClickListener(view -> {
             journalRef.get()
@@ -114,6 +118,26 @@ public class MainActivity extends AppCompatActivity {
                      recThought.setText(thought);
                  }
             }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.update_button:
+                updateTitle();
+                break;
+        }
+    }
+
+    private void updateTitle() {
+        String title = enterTitle.getText().toString().trim();
+        Map<String, Object> data = new HashMap<>();
+        data.put(KEY_TITLE, title);
+        journalRef.update(data).addOnSuccessListener(aVoid -> {
+            Toast.makeText(this, "Success update", Toast.LENGTH_LONG).show();
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Failure to update", Toast.LENGTH_LONG).show();
         });
     }
 }
