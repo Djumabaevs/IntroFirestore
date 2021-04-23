@@ -132,8 +132,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateTitle() {
         String title = enterTitle.getText().toString().trim();
+        String thought = enterThought.getText().toString().trim();
         Map<String, Object> data = new HashMap<>();
         data.put(KEY_TITLE, title);
+        data.put(KEY_THOUGHT, thought);
         journalRef.update(data).addOnSuccessListener(aVoid -> {
             Toast.makeText(this, "Success update", Toast.LENGTH_LONG).show();
         }).addOnFailureListener(e -> {
