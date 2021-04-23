@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity" ;
     private EditText enterTitle;
     private EditText enterThought;
-    private Button saveButton, showButton, updateButton;
+    private Button saveButton, showButton, updateButton, deleteButton;
     private TextView recTitle, recThought;
 
     //Keys
@@ -54,8 +55,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recThought = findViewById(R.id.rec_thought);
         showButton = findViewById(R.id.show_button);
         updateButton = findViewById(R.id.update_button);
+        deleteButton = findViewById(R.id.delete_button);
 
         updateButton.setOnClickListener(this);
+        deleteButton.setOnClickListener(this);
 
         showButton.setOnClickListener(view -> {
             journalRef.get()
@@ -116,6 +119,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                      recTitle.setText(title);
                      recThought.setText(thought);
+                 } else {
+                     recTitle.setText("");
+                     recThought.setText("");
                  }
             }
         });
@@ -127,7 +133,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.update_button:
                 updateTitle();
                 break;
+            case R.id.delete_button:
+                deleteData();
+                break;
         }
+    }
+
+    private void deleteData() {
+       /* Map<String, Object> data = new HashMap<>();
+        data.put(KEY_THOUGHT, FieldValue.delete());
+        journalRef.update(data);*/
+
+        journalRef.update(KEY_THOUGHT, FieldValue.delete()).addOnSuccessListener(aVoid -> {
+            Toast.makeText(this, "Delete update", Toast.LENGTH_LONG).show();
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Failure delete", Toast.LENGTH_LONG).show();
+        });
+
+    }
+
+    private void deleteAll() {
+        journalRef.delete();
     }
 
     private void updateTitle() {

@@ -5,4 +5,5 @@
     <string name="enter_thoughts">Enter thoughts</string>
     <string name="show_button_text">Show Data</string>
     <string name="update_button_text">Update Title</string>
+    <string name="delete_button_text">Delete</string>
 </resources>
