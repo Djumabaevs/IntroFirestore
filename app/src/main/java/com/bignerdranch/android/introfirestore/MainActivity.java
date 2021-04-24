@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DocumentReference journalRef = db.document("Journal/First thought");
 /*    private DocumentReference journalRef =    db.collection("Journal")
             .document("First thought");*/
+    private CollectionReference collectionReference = db.collection("Journal");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,19 +83,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.toString()));
         });
 
+
         saveButton.setOnClickListener(view -> {
-            String title = enterTitle.getText().toString().trim();
+
+            addThought();
+
+           /* String title = enterTitle.getText().toString().trim();
             String thought = enterThought.getText().toString().trim();
 
             Journal journal = new Journal();
             journal.setTitle(title);
             journal.setThought(thought);
+*/
+
 
            /* Map<String, Object> data = new HashMap<>();
             data.put(KEY_TITLE, title);
             data.put(KEY_THOUGHT, thought);*/
 
-                    journalRef.set(journal)
+                  /*  journalRef.set(journal)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -105,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         public void onFailure(@NonNull Exception e) {
                             Log.d(TAG, "onFailure: " + e.toString());
                         }
-                    });
+                    });*/
 
         });
     }
@@ -152,6 +160,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 deleteData();
                 break;
         }
+    }
+
+    private void addThought() {
+        String title = enterTitle.getText().toString().trim();
+        String thought = enterThought.getText().toString().trim();
+
+        Journal journal = new Journal(title, thought);
+       /* journal.setTitle(title);
+        journal.setThought(thought);*/
+
+        collectionReference.add(journal)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_LONG).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(MainActivity.this, "Something went wrong",
+                            Toast.LENGTH_LONG).show();
+                });
     }
 
     private void deleteData() {
