@@ -23,6 +23,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,15 +65,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         deleteButton.setOnClickListener(this);
 
         showButton.setOnClickListener(view -> {
-            journalRef.get()
+
+            getThoughts();
+
+           /* journalRef.get()
                     .addOnSuccessListener(documentSnapshot -> {
                         if(documentSnapshot.exists()) {
 
                             Journal journal = documentSnapshot.toObject(Journal.class);
 
-                          /*
+                          *//*
                             String title = documentSnapshot.getString(KEY_TITLE);
-                            String thought = documentSnapshot.getString(KEY_THOUGHT);*/
+                            String thought = documentSnapshot.getString(KEY_THOUGHT);*//*
 
                             assert journal != null;
                             recTitle.setText(journal.getTitle());
@@ -80,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Toast.makeText(MainActivity.this, "No data", Toast.LENGTH_LONG).show();
                         }
                     })
-                    .addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.toString()));
+                    .addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.toString()));*/
         });
 
 
@@ -177,6 +182,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .addOnFailureListener(e -> {
                     Toast.makeText(MainActivity.this, "Something went wrong",
                             Toast.LENGTH_LONG).show();
+                });
+    }
+
+    private void getThoughts() {
+        collectionReference.get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        Log.d(TAG, "getThoughts: " + snapshot.getId());
+                    }
+                })
+                .addOnFailureListener(e -> {
+
                 });
     }
 
