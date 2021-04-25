@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText enterTitle;
     private EditText enterThought;
     private Button saveButton, showButton, updateButton, deleteButton;
-    private TextView recTitle, recThought;
+    private TextView recTitle;
 
     //Keys
     public static final String KEY_TITLE = "title";
@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         enterTitle = findViewById(R.id.edit_text_title);
         enterThought = findViewById(R.id.edit_text_thoughts);
         recTitle = findViewById(R.id.rec_title);
-        recThought = findViewById(R.id.rec_thought);
         showButton = findViewById(R.id.show_button);
         updateButton = findViewById(R.id.update_button);
         deleteButton = findViewById(R.id.delete_button);
@@ -135,12 +134,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                              Toast.LENGTH_LONG).show();
                  }
                  if(documentSnapshot != null & documentSnapshot.exists()) {
-
+                     String data = "";
                      Journal journal = documentSnapshot.toObject(Journal.class);
-
                      assert journal != null;
-                     recTitle.setText(journal.getTitle());
-                     recThought.setText(journal.getThought());
+                     data += "Title: " + journal.getTitle() + " \n" +
+                             "Thought: " + journal.getThought();
+                     recTitle.setText(data);
+
 
                     /* String title = documentSnapshot.getString(KEY_TITLE);
                      String thought = documentSnapshot.getString(KEY_THOUGHT);
@@ -149,7 +149,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                      recThought.setText(thought);*/
                  } else {
                      recTitle.setText("");
-                     recThought.setText("");
                  }
             }
         });
@@ -189,10 +188,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         collectionReference.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        String data = "";
 //                        Log.d(TAG, "getThoughts: " + snapshot.getId());
                         Journal journal = snapshot.toObject(Journal.class);
-                        recTitle.setText(journal.getTitle());
-                        recThought.setText(journal.getThought());
+                        data += "Title: " + journal.getTitle() + " \n" +
+                                "Thought: " + journal.getThought();
+                        recTitle.setText(data);
                     }
                 })
                 .addOnFailureListener(e -> {
