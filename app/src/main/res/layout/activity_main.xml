@@ -45,6 +45,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+  <!--  <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="9dp">-->
+
+
     <TextView
         android:id="@+id/rec_title"
         android:textSize="28sp"
@@ -56,5 +62,7 @@
         android:textSize="28sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
+<!--    </androidx.core.widget.NestedScrollView>-->
 
 </LinearLayout>

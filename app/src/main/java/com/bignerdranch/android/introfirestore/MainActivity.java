@@ -189,7 +189,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         collectionReference.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        Log.d(TAG, "getThoughts: " + snapshot.getId());
+//                        Log.d(TAG, "getThoughts: " + snapshot.getId());
+                        Journal journal = snapshot.toObject(Journal.class);
+                        recTitle.setText(journal.getTitle());
+                        recThought.setText(journal.getThought());
                     }
                 })
                 .addOnFailureListener(e -> {
