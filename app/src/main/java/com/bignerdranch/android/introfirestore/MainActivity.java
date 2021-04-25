@@ -187,14 +187,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void getThoughts() {
         collectionReference.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    StringBuilder data = new StringBuilder();
                     for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        String data = "";
 //                        Log.d(TAG, "getThoughts: " + snapshot.getId());
                         Journal journal = snapshot.toObject(Journal.class);
-                        data += "Title: " + journal.getTitle() + " \n" +
-                                "Thought: " + journal.getThought();
-                        recTitle.setText(data);
+                        data.append("Title: ").append(journal.getTitle()).append(" \n")
+                                .append("Thought: ").append(journal.getThought()).append("\n\n");
                     }
+                    recTitle.setText(data.toString());
                 })
                 .addOnFailureListener(e -> {
 
