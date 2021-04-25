@@ -125,7 +125,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-        journalRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+
+        collectionReference.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
+                                @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.d(TAG, "onEvent: " + error.toString());
+                }
+
+                StringBuilder data = new StringBuilder();
+                for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+//                        Log.d(TAG, "getThoughts: " + snapshot.getId());
+                    Journal journal = snapshot.toObject(Journal.class);
+                    data.append("Title: ").append(journal.getTitle()).append(" \n")
+                            .append("Thought: ").append(journal.getThought()).append("\n\n");
+                }
+                recTitle.setText(data.toString());
+
+   /*     journalRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot,
                                 @Nullable FirebaseFirestoreException error) {
@@ -142,92 +160,94 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                      recTitle.setText(data);
 
 
-                    /* String title = documentSnapshot.getString(KEY_TITLE);
+                    *//* String title = documentSnapshot.getString(KEY_TITLE);
                      String thought = documentSnapshot.getString(KEY_THOUGHT);
 
                      recTitle.setText(title);
-                     recThought.setText(thought);*/
+                     recThought.setText(thought);*//*
                  } else {
                      recTitle.setText("");
                  }
             }
+        });*/
+            }
         });
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.update_button:
-                updateTitle();
-                break;
-            case R.id.delete_button:
-                deleteData();
-                break;
-        }
-    }
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.update_button:
+                        updateTitle();
+                        break;
+                    case R.id.delete_button:
+                        deleteData();
+                        break;
+                }
+            }
 
-    private void addThought() {
-        String title = enterTitle.getText().toString().trim();
-        String thought = enterThought.getText().toString().trim();
+            private void addThought() {
+                String title = enterTitle.getText().toString().trim();
+                String thought = enterThought.getText().toString().trim();
 
-        Journal journal = new Journal(title, thought);
+                Journal journal = new Journal(title, thought);
        /* journal.setTitle(title);
         journal.setThought(thought);*/
 
-        collectionReference.add(journal)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_LONG).show();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(MainActivity.this, "Something went wrong",
-                            Toast.LENGTH_LONG).show();
-                });
-    }
+                collectionReference.add(journal)
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_LONG).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(MainActivity.this, "Something went wrong",
+                                    Toast.LENGTH_LONG).show();
+                        });
+            }
 
-    private void getThoughts() {
-        collectionReference.get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    StringBuilder data = new StringBuilder();
-                    for(QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+            private void getThoughts() {
+                collectionReference.get()
+                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                            StringBuilder data = new StringBuilder();
+                            for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
 //                        Log.d(TAG, "getThoughts: " + snapshot.getId());
-                        Journal journal = snapshot.toObject(Journal.class);
-                        data.append("Title: ").append(journal.getTitle()).append(" \n")
-                                .append("Thought: ").append(journal.getThought()).append("\n\n");
-                    }
-                    recTitle.setText(data.toString());
-                })
-                .addOnFailureListener(e -> {
+                                Journal journal = snapshot.toObject(Journal.class);
+                                data.append("Title: ").append(journal.getTitle()).append(" \n")
+                                        .append("Thought: ").append(journal.getThought()).append("\n\n");
+                            }
+                            recTitle.setText(data.toString());
+                        })
+                        .addOnFailureListener(e -> {
 
-                });
-    }
+                        });
+            }
 
-    private void deleteData() {
+            private void deleteData() {
        /* Map<String, Object> data = new HashMap<>();
         data.put(KEY_THOUGHT, FieldValue.delete());
         journalRef.update(data);*/
 
-        journalRef.update(KEY_THOUGHT, FieldValue.delete()).addOnSuccessListener(aVoid -> {
-            Toast.makeText(this, "Delete update", Toast.LENGTH_LONG).show();
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Failure delete", Toast.LENGTH_LONG).show();
-        });
+                journalRef.update(KEY_THOUGHT, FieldValue.delete()).addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Delete update", Toast.LENGTH_LONG).show();
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failure delete", Toast.LENGTH_LONG).show();
+                });
 
-    }
+            }
 
-    private void deleteAll() {
-        journalRef.delete();
-    }
+            private void deleteAll() {
+                journalRef.delete();
+            }
 
-    private void updateTitle() {
-        String title = enterTitle.getText().toString().trim();
-        String thought = enterThought.getText().toString().trim();
-        Map<String, Object> data = new HashMap<>();
-        data.put(KEY_TITLE, title);
-        data.put(KEY_THOUGHT, thought);
-        journalRef.update(data).addOnSuccessListener(aVoid -> {
-            Toast.makeText(this, "Success update", Toast.LENGTH_LONG).show();
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Failure to update", Toast.LENGTH_LONG).show();
-        });
-    }
-}
+            private void updateTitle() {
+                String title = enterTitle.getText().toString().trim();
+                String thought = enterThought.getText().toString().trim();
+                Map<String, Object> data = new HashMap<>();
+                data.put(KEY_TITLE, title);
+                data.put(KEY_THOUGHT, thought);
+                journalRef.update(data).addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Success update", Toast.LENGTH_LONG).show();
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failure to update", Toast.LENGTH_LONG).show();
+                });
+            }
+        }
